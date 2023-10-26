@@ -391,27 +391,17 @@ def kronecker(a: float, b: float) -> int:
         return 0
 
 
-# def exp_log_sum_exp_log(v, w):
-#     sign_v = np.sign(v)
-#     log_v = np.nan_to_num(clog(w)) + np.nan_to_num(clog(np.abs(v)))
-#     max_val = np.max(sign_v * log_v, axis=1)
-#     sum_exp_val = np.sum(np.exp(log_v.T - max_val).T * sign_v, axis=1)
-#     log_sum_exp_val = max_val + clog(np.abs(sum_exp_val))
-#     s = np.exp(log_sum_exp_val)
-#     return s
+def exp_log_sum_exp_log(v, w):
+    "exp-log-sum trick"
+    sign_v = np.sign(v)
+    log_v = np.nan_to_num(clog(w)) + np.nan_to_num(clog(np.abs(v)))
+    max_val = np.max(sign_v * log_v, axis=1)
+    sum_exp_val = np.sum(np.exp(log_v.T - max_val).T * sign_v, axis=1)
+    log_sum_exp_val = max_val + clog(np.abs(sum_exp_val))
+    s = np.exp(log_sum_exp_val)
+    return s
 
 
-# def clog(x):
-#     x[x == 0] = 10 ** (-16)
-#     return np.log(x)
-
-
-if __name__ == "__main__":
-    g = create_network(
-        reactions=[("1S", "2S", 10), ("2S", "3S", 10), ("3S", "2S", 1), ("3S", "1S", 2)]
-    )
-    s = SRN(g)
-    plot_gamma(s, n=10)
-
-    # v = np.array([[-0.5, 0.5], [0.4, 0.6]])
-    # print(v)
+def clog(x):
+    x[x == 0] = 10 ** (-16)
+    return np.log(x)
